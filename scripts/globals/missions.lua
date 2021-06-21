@@ -326,13 +326,13 @@ xi.mission.id =
     -----------------------------------
     [xi.mission.area[xi.mission.log_id.WOTG]] =
     {
-        CAVERNOUS_MAWS             = 0,
-        BACK_TO_THE_BEGINNING      = 1,
-        CAIT_SITH                  = 2,
-        THE_QUEEN_OF_THE_DANCE     = 3,
-        WHILE_THE_CAT_IS_AWAY      = 4,
-        A_TIMESWEPT_BUTTERFLY      = 5,
-        PURPLE_THE_NEW_BLACK       = 6,
+        CAVERNOUS_MAWS             = 0, -- ±
+        BACK_TO_THE_BEGINNING      = 1, -- ±
+        CAIT_SITH                  = 2, -- ±
+        THE_QUEEN_OF_THE_DANCE     = 3, -- ±
+        WHILE_THE_CAT_IS_AWAY      = 4, -- ±
+        A_TIMESWEPT_BUTTERFLY      = 5, -- ±
+        PURPLE_THE_NEW_BLACK       = 6, -- ±
         IN_THE_NAME_OF_THE_FATHER  = 7,
         DANCERS_IN_DISTRESS        = 8,
         DAUGHTER_OF_A_KNIGHT       = 9,
@@ -411,9 +411,9 @@ xi.mission.id =
         HASTEN_IN_A_JAM_IN_JEUNO            = 2,  -- ±
         WELCOME_TO_MY_DECREPIT_DOMICILE     = 3,  -- ±
         CURSES_A_HORRIFICALLY_HARROWING_HEX = 4,  -- ±
-        AN_ERRAND_THE_PROFESSORS_PRICE      = 5,
-        SHOCK_ARRANT_ABUSE_OF_AUTHORITY     = 6,
-        LENDER_BEWARE_READ_THE_FINE_PRINT   = 7,
+        AN_ERRAND_THE_PROFESSORS_PRICE      = 5,  -- ±
+        SHOCK_ARRANT_ABUSE_OF_AUTHORITY     = 6,  -- ±
+        LENDER_BEWARE_READ_THE_FINE_PRINT   = 7,  -- ±
         RESCUE_A_MOOGLES_LABOR_OF_LOVE      = 8,
         ROAR_A_CAT_BURGLAR_BARES_HER_FANGS  = 9,
         RELIEF_A_TRIUMPHANT_RETURN          = 10,
@@ -588,7 +588,7 @@ xi.mission.id =
         VOLTO_OSCURO                    = 40,  -- ±
         RING_MY_BELL                    = 42,  -- ±
         -- REVITALIZATION               =  -- Category
-        SPIRITS_AWOKEN                  = 44,
+        SPIRITS_AWOKEN                  = 44,  -- ±
         CRASHING_WAVES                  = 46,
         CALL_TO_SERVE                   = 48,
         NUMBERING_DAYS                  = 50,
@@ -789,12 +789,15 @@ local function getRequiredRank(missionId)
     local requiredRank = 0
 
     if
-        missionId <= 2 or
-        (missionId >= 10 and missionId <= 12)
+        missionId <= 2
     then
         requiredRank = math.floor(missionId / 3) + 1
-    elseif missionId >= 13 then
-        requiredRank = math.floor((missionId - 12) / 2) + 4
+    elseif missionId >= 10 and missionId <= 12 then
+        requiredRank = 3
+    elseif missionId == 13 then
+        requiredRank = 4
+    elseif missionId >= 14 then
+        requiredRank = math.floor((missionId - 13) / 2) + 5
     else
         requiredRank = 2
     end

@@ -1620,16 +1620,16 @@ void CCharEntity::OnItemFinish(CItemState& state, action_t& action)
     //#TODO: I'm sure this is supposed to be in the action packet... (animation, message)
     if (PItem->getAoE())
     {
-        PTarget->ForParty([PItem, PTarget](CBattleEntity* PMember) {
+        PTarget->ForParty([this, PItem, PTarget](CBattleEntity* PMember) {
             if (!PMember->isDead() && distance(PTarget->loc.p, PMember->loc.p) <= 10)
             {
-                luautils::OnItemUse(PMember, PItem);
+                luautils::OnItemUse(this, PMember, PItem);
             }
         });
     }
     else
     {
-        luautils::OnItemUse(PTarget, PItem);
+        luautils::OnItemUse(this, PTarget, PItem);
     }
 
     action.id         = this->id;
@@ -1843,9 +1843,6 @@ void CCharEntity::UpdateMoghancement()
     bool   hasTiedElements = false;
     for (uint8 elementID = 1; elementID < 9; ++elementID)
     {
-        // False positive: elements size is always 8
-        // error: Out of bounds access in 'elements[elementID-1]', if 'elements' size is 1 and 'elementID-1' is 7 [containerOutOfBounds]
-        // cppcheck-suppress containerOutOfBounds
         uint16 aura = elements[elementID - 1];
         if (aura > dominantAura)
         {

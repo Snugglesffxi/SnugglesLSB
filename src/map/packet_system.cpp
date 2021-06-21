@@ -5722,10 +5722,6 @@ void SmallPacket0x0FA(map_session_data_t* const PSession, CCharEntity* const PCh
         for (int32 i = 0; i < MAX_CONTAINER_SIZE * 2; ++i)
         {
             // We can stop updating the order numbers once we hit an empty order number
-
-            // False positive: we're checking to make sure we don't over-run
-            // error: Out of bounds access in 'placedItems[i]', if 'placedItems' size is 1 and 'i' is 239 [containerOutOfBounds]
-            // cppcheck-suppress containerOutOfBounds
             if (placedItems[i] == nullptr)
             {
                 break;
@@ -6241,7 +6237,8 @@ void SmallPacket0x102(map_session_data_t* const PSession, CCharEntity* const PCh
                     {
                         if (PChar->m_SetBlueSpells[spellIndex] == 0x00)
                         {
-                            ShowExploit(CL_RED "SmallPacket0x102: Player %s trying to unset BLU spell they don't have set! \n" CL_RESET, PChar->GetName());
+                            ShowExploit(CL_RED "SmallPacket0x102: Player %s trying to unset BLU spell they don't have set!\n" CL_RESET, PChar->GetName());
+                            return;
                         }
                         else
                         {
@@ -6251,6 +6248,7 @@ void SmallPacket0x102(map_session_data_t* const PSession, CCharEntity* const PCh
                     else
                     {
                         ShowDebug("SmallPacket0x102: Cannot resolve spell id %u \n", spellInQuestion);
+                        return;
                     }
                 }
             }
@@ -6281,6 +6279,15 @@ void SmallPacket0x102(map_session_data_t* const PSession, CCharEntity* const PCh
 
                 if (spell != nullptr)
                 {
+                    uint8 mLevel = PChar->m_LevelRestriction != 0 && PChar->m_LevelRestriction < PChar->GetMLevel() ? PChar->m_LevelRestriction : PChar->GetMLevel();
+                    uint8 sLevel = floor(mLevel / 2);
+
+                    if (mLevel < spell->getJob(PChar->GetMJob()) && sLevel < spell->getJob(PChar->GetSJob()))
+                    {
+                        ShowExploit(CL_RED "SmallPacket0x102: Player %s trying to set BLU spell at invalid level!\n" CL_RESET, PChar->GetName());
+                        return;
+                    }
+
                     blueutils::SetBlueSpell(PChar, spell, spellIndex, (spellToAdd > 0));
                     charutils::BuildingCharTraitsTable(PChar);
                     PChar->pushPacket(new CCharAbilitiesPacket(PChar));
