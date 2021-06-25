@@ -5839,7 +5839,7 @@ void CLuaBaseEntity::addMission(uint8 missionLogID, uint16 missionID)
     }
     else
     {
-        ShowError(CL_RED "Lua::delMission: missionLogID %i or Mission %i is invalid\n" CL_RESET, missionLogID, missionID);
+        ShowError(CL_RED "Lua::addMission: missionLogID %i or Mission %i is invalid\n" CL_RESET, missionLogID, missionID);
     }
 }
 
@@ -12687,7 +12687,7 @@ void CLuaBaseEntity::stun(uint32 milliseconds)
 
 uint32 CLuaBaseEntity::getPool()
 {
-    if (m_PBaseEntity->objtype == TYPE_MOB)
+    if (m_PBaseEntity->objtype == TYPE_MOB || m_PBaseEntity->objtype == TYPE_TRUST)
     {
         CMobEntity* PMob = static_cast<CMobEntity*>(m_PBaseEntity);
         return PMob->m_Pool;
