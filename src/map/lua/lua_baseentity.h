@@ -46,6 +46,8 @@ public:
         return m_PBaseEntity;
     }
 
+    friend std::ostream& operator<<(std::ostream& out, const CLuaBaseEntity& entity);
+
     // Messaging System
     void showText(CLuaBaseEntity* mob, uint16 messageID, sol::object const& p0, sol::object const& p1, sol::object const& p2, sol::object const& p3); // Displays Dialog for npc
     void messageText(CLuaBaseEntity* PLuaBaseEntity, uint16 messageID, sol::object const& arg2, sol::object const& arg3);
@@ -488,7 +490,7 @@ public:
     // Instances
     auto getInstance() -> std::optional<CLuaInstance>;
     void setInstance(CLuaInstance* PLuaInstance);
-    void createInstance(uint8 instanceID, uint16 zoneID);
+    void createInstance(uint16 instanceID);
     void instanceEntry(CLuaBaseEntity* PLuaBaseEntity, uint32 response);
     // int32 isInAssault(lua_Stat*); // If player is in a Instanced Assault Dungeon returns true --- Not Implemented
 
