@@ -1,4 +1,4 @@
-﻿/*
+/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -631,7 +631,7 @@ public:
 
     void removeAmmo();
 
-    uint8  getWeaponSkillLevel(uint8 slotID);                        // Get Skill for equipped weapon
+    uint16 getWeaponSkillLevel(uint8 slotID);                        // Get Skill for equipped weapon
     uint16 getWeaponDamageType(uint8 slotID);                        // gets the type of weapon equipped
     uint8  getWeaponSkillType(uint8 slotID);                         // gets the type of weapon equipped
     uint8  getWeaponSubSkillType(uint8 slotID);                      // gets the subskill of weapon equipped

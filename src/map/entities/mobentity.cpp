@@ -185,7 +185,7 @@ uint32 CMobEntity::GetRandomGil()
         if (max - min < 2)
         {
             max = min + 2;
-            ShowWarning("CMobEntity::GetRandomGil Max value is set too low, defauting\n");
+            ShowWarning("CMobEntity::GetRandomGil Max value is set too low, defauting");
         }
 
         return xirand::GetRandomNumber(min, max);
@@ -692,11 +692,21 @@ void CMobEntity::OnMobSkillFinished(CMobSkillState& state, action_t& action)
 
         if (objtype == TYPE_PET && static_cast<CPetEntity*>(this)->getPetType() != PET_TYPE::JUG_PET)
         {
+            PET_TYPE petType = static_cast<CPetEntity*>(this)->getPetType();
+
             if (static_cast<CPetEntity*>(this)->getPetType() == PET_TYPE::AVATAR || static_cast<CPetEntity*>(this)->getPetType() == PET_TYPE::WYVERN)
             {
                 target.animation = PSkill->getPetAnimationID();
             }
-            target.param = luautils::OnPetAbility(PTarget, this, PSkill, PMaster, &action);
+
+            if (petType == PET_TYPE::AUTOMATON)
+            {
+                target.param = luautils::OnAutomatonAbility(PTarget, this, PSkill, PMaster, &action);
+            }
+            else
+            {
+                target.param = luautils::OnPetAbility(PTarget, this, PSkill, PMaster, &action);
+            }
         }
         else
         {
@@ -779,7 +789,6 @@ void CMobEntity::DistributeRewards()
 
     if (PChar != nullptr && PChar->id == m_OwnerID.id)
     {
-        PChar->setWeaponSkillKill(false);
         StatusEffectContainer->KillAllStatusEffect();
         PChar->m_charHistory.enemiesDefeated++;
 

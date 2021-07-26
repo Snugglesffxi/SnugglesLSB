@@ -215,7 +215,7 @@ namespace itemutils
             // cppcheck-suppress CastIntegerToAddressAtReturn
             return g_pItemList[ItemID];
         }
-        ShowWarning(CL_CYAN "ItemID %u too big\n" CL_RESET, ItemID);
+        ShowWarning("ItemID %u too big", ItemID);
         return nullptr;
     }
 
@@ -260,7 +260,7 @@ namespace itemutils
             // cppcheck-suppress CastIntegerToAddressAtReturn
             return g_pDropList[DropID];
         }
-        ShowWarning(CL_CYAN "DropID %u too big\n" CL_RESET, DropID);
+        ShowWarning("DropID %u too big", DropID);
         return nullptr;
     }
 
@@ -278,7 +278,7 @@ namespace itemutils
             // cppcheck-suppress CastIntegerToAddressAtReturn
             return g_pLootList[LootID];
         }
-        ShowWarning(CL_CYAN "LootID %u too big\n" CL_RESET, LootID);
+        ShowWarning("LootID %u too big", LootID);
         return nullptr;
     }
 
@@ -363,6 +363,7 @@ namespace itemutils
                     if (PItem->isType(ITEM_GENERAL))
                     {
                     }
+
                     if (PItem->isType(ITEM_USABLE))
                     {
                         ((CItemUsable*)PItem)->setValidTarget(Sql_GetUIntData(SqlHandle, 7));
@@ -379,7 +380,12 @@ namespace itemutils
                     {
                         ((CItemPuppet*)PItem)->setEquipSlot(Sql_GetUIntData(SqlHandle, 37));
                         ((CItemPuppet*)PItem)->setElementSlots(Sql_GetUIntData(SqlHandle, 38));
+
+                        // If this is a PUP attachment, load the appropriate script as well
+                        auto attachmentFile = fmt::format("./scripts/globals/abilities/pets/attachments/{}.lua", PItem->getName());
+                        luautils::CacheLuaObjectFromFile(attachmentFile);
                     }
+
                     if (PItem->isType(ITEM_EQUIPMENT))
                     {
                         ((CItemEquipment*)PItem)->setReqLvl(Sql_GetUIntData(SqlHandle, 15));
@@ -396,6 +402,7 @@ namespace itemutils
                             ((CItemEquipment*)PItem)->setSubType(ITEM_CHARGED);
                         }
                     }
+
                     if (PItem->isType(ITEM_WEAPON))
                     {
                         ((CItemWeapon*)PItem)->setSkillType(Sql_GetUIntData(SqlHandle, 23));
@@ -409,6 +416,7 @@ namespace itemutils
                         ((CItemWeapon*)PItem)->setMaxHit(Sql_GetUIntData(SqlHandle, 31));
                         ((CItemWeapon*)PItem)->setUnlockablePoints(Sql_GetUIntData(SqlHandle, 32));
                     }
+
                     if (PItem->isType(ITEM_FURNISHING))
                     {
                         ((CItemFurnishing*)PItem)->setStorage(Sql_GetUIntData(SqlHandle, 33));
@@ -416,6 +424,7 @@ namespace itemutils
                         ((CItemFurnishing*)PItem)->setElement(Sql_GetUIntData(SqlHandle, 35));
                         ((CItemFurnishing*)PItem)->setAura(Sql_GetUIntData(SqlHandle, 36));
                     }
+
                     g_pItemList[PItem->getID()] = PItem;
 
                     auto filename = fmt::format("./scripts/globals/items/{}.lua", PItem->getName());
