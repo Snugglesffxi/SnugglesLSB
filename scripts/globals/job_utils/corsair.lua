@@ -1,7 +1,7 @@
 -----------------------------------
 -- Corsair Job Utilities
 -----------------------------------
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/ability")
 require("scripts/globals/jobpoints")
 require("scripts/globals/status")
@@ -156,7 +156,7 @@ local function applyRoll(caster, target, ability, action, total)
     local bonusJob = corsairRollMods[abilityId][6]
 
     if bonusJob == xi.job.NONE and doBonus then
-            effectpower = effectpower + corsairRollMods[abilityId][3]
+        effectpower = effectpower + corsairRollMods[abilityId][3]
     end
 
     if caster:getLocalVar("corsairRollBonus") == 1 and total < 12 then
